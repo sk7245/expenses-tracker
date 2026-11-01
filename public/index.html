@@ -9,16 +9,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <script type="module" src="app.js"></script>
 </head>
 
 <body>
     <div class="container">
 
-        <header>
-            <h1>Expenses Tracker</h1>
-            <p class="tagline">Know where every rupee goes</p>
+        <header class="topbar">
+            <div>
+                <h1>Expenses Tracker</h1>
+                <p class="tagline">Know where every rupee goes</p>
+            </div>
+            <div class="user-box">
+                <span id="user-name"></span>
+                <button type="button" id="logout-btn" class="link-btn">Log out</button>
+            </div>
         </header>
+
+        <!-- shown once if the old version left data in this browser -->
+        <div id="import-banner" class="banner" hidden>
+            <p id="import-text"></p>
+            <div class="banner-actions">
+                <button type="button" id="import-btn" class="small-btn">Import</button>
+                <button type="button" id="import-dismiss" class="link-btn">Not now</button>
+            </div>
+        </div>
 
         <!-- balance for the selected month -->
         <section class="balance-card">
@@ -37,9 +52,40 @@
             </div>
         </section>
 
-        <!-- add transaction form -->
+        <!-- ask questions in plain English (AI) -->
+        <section id="ask-section" class="ask-card" hidden>
+            <h3>Ask about your money</h3>
+            <form id="ask-form" class="ask-form">
+                <input type="text" id="ask-input" placeholder="e.g. How much did I spend on food last month?" maxlength="300">
+                <button type="submit" id="ask-btn" class="small-btn">Ask</button>
+            </form>
+            <div class="chips">
+                <button type="button" class="chip">How much did I spend this month?</button>
+                <button type="button" class="chip">What was my biggest expense last month?</button>
+                <button type="button" class="chip">How much have I spent on Swiggy and Zomato?</button>
+            </div>
+            <div id="ask-result" class="ask-result" hidden>
+                <p id="ask-answer"></p>
+                <p id="ask-meta" class="meta"></p>
+                <ul id="ask-list" class="ask-list"></ul>
+            </div>
+        </section>
+
+        <!-- where the money went this month -->
+        <section id="breakdown-section" hidden>
+            <h3>Where it went</h3>
+            <div id="breakdown" class="bars"></div>
+        </section>
+
+        <!-- add / edit transaction form -->
         <section>
-            <h3>Add transaction</h3>
+            <div class="section-header">
+                <h3 id="form-title">Add transaction</h3>
+                <button type="button" id="scan-btn" class="small-btn outline" hidden>Scan a bill</button>
+                <input type="file" id="scan-input" accept="image/*" hidden>
+            </div>
+            <p id="scan-status" class="hint" hidden></p>
+
             <form id="transaction-form">
 
                 <!-- expense or income toggle -->
@@ -51,12 +97,12 @@
                 </div>
 
                 <label for="description">Description</label>
-                <input type="text" id="description" placeholder="e.g. Swiggy order, Rent, Salary" maxlength="60">
+                <input type="text" id="description" placeholder="e.g. Swiggy order, Rent, Salary" maxlength="60" autocomplete="off">
 
                 <div class="row">
                     <div>
                         <label for="amount">Amount (₹)</label>
-                        <input type="number" id="amount" placeholder="0" min="1" step="0.01">
+                        <input type="number" id="amount" placeholder="0" min="0.01" step="0.01">
                     </div>
                     <div>
                         <label for="date">Date</label>
@@ -91,6 +137,7 @@
                                 <option value="Other Income">Other</option>
                             </optgroup>
                         </select>
+                        <p id="category-hint" class="hint" hidden></p>
                     </div>
                     <div>
                         <label for="payment-mode" id="payment-label">Paid via</label>
@@ -106,13 +153,16 @@
 
                 <p id="form-error" class="form-error" hidden></p>
 
-                <button type="submit" id="add-btn" class="add-btn">Add Transaction</button>
+                <div class="form-buttons">
+                    <button type="submit" id="add-btn" class="add-btn">Add Transaction</button>
+                    <button type="button" id="cancel-edit" class="cancel-btn" hidden>Cancel</button>
+                </div>
             </form>
         </section>
 
         <!-- history -->
         <section>
-            <div class="history-header">
+            <div class="section-header">
                 <h3>History</h3>
                 <div class="filters">
                     <input type="month" id="filter-month" class="filter">
