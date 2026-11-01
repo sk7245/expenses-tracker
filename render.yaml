@@ -1,0 +1,21 @@
+# Render blueprint: Render reads this file and creates the web service.
+# Secrets marked "sync: false" are typed into the Render dashboard, never into this file.
+services:
+  - type: web
+    name: expenses-tracker
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "24"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

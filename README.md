@@ -1,47 +1,116 @@
 # Expenses Tracker
 
-A simple web app to keep track of my monthly income and spending. I built it because I wanted one place to see where my money actually goes each month — rent, food orders, recharges, travel — instead of guessing at the end of the month.
+A web app to track monthly income and spending, built for me and my friends. Each person has their own account, and AI helps with the boring parts: picking categories, reading bills, and answering questions like *"how much did I spend on food last month?"*
 
 **Live demo:** _coming soon_
 
 ## Features
 
-- Add income and expenses with description, amount, date, category and payment mode (UPI, cash, card, net banking)
-- Categories change based on the type — expense categories like Food & Dining, Rent, Bills & Recharge, and income categories like Salary, Freelance
-- Monthly view: balance, total income and total spent for the selected month
+**Tracking**
+- Sign up / log in. Every user only ever sees their own data
+- Add, edit and delete income and expenses: description, amount, date, category, payment mode (UPI, cash, card, net banking)
+- Indian categories (Food & Dining, Rent, Bills & Recharge, EMI & Loans, ...) and amounts in Indian format (₹1,50,000)
+- Monthly view: balance, income, spent, and a "where it went" bar chart by category
 - Filter history by month and category
-- Delete a transaction (with a confirmation)
-- Amounts shown in Indian format (₹1,50,000)
-- Data is saved in the browser, so it stays after a refresh
-- Works on mobile screens
+- Works on phones
+
+**AI** (Google Gemini)
+- **Auto category**: type "Swiggy biryani" and Food & Dining is picked for you
+- **Scan a bill**: take a photo of a bill or UPI payment screenshot and the form fills itself
+- **Ask about your money**: ask questions in plain English and get answers from your own data
 
 ## Built with
 
-- HTML
-- CSS (Flexbox, CSS variables, media queries)
-- JavaScript (DOM, events, localStorage)
-
-No frameworks or libraries.
-
-## Run it locally
-
-1. Clone the repo
-   ```
-   git clone https://github.com/<your-username>/expenses-tracker.git
-   ```
-2. Open the folder in VS Code
-3. Right-click `index.html` → **Open with Live Server** (or just open `index.html` in a browser)
+| Part | Tech |
+|---|---|
+| Frontend | HTML, CSS, JavaScript (no framework) |
+| Backend | Node.js, Express 5 |
+| Database | MongoDB (Atlas) with Mongoose |
+| Auth | JWT in an httpOnly cookie, bcrypt password hashing |
+| AI | Gemini API (text + vision + embeddings) |
+| Tests | Node's built-in test runner, Supertest, mongodb-memory-server |
+| Hosting | Render |
 
 ## How it works
 
-- All transactions are kept in one JavaScript array. Every add or delete updates the array, saves it to `localStorage`, and then calls `render()` to redraw the page from that array.
-- `render()` filters transactions for the selected month and category, calculates the totals, and builds the list.
-- User input is added to the page with `textContent` instead of `innerHTML`, so text like `<script>` is shown as plain text and never runs.
-- The delete buttons use event delegation — one click listener on the list instead of one per row.
+```
+Browser (public/)  --fetch-->  Express API (src/)  -->  MongoDB
+                                     |
+                                     +--> Gemini API (only for AI features)
+```
 
-## What's next
+### Login
+- Passwords are hashed with bcrypt; only the hash is stored.
+- After login the server puts a signed JWT in an **httpOnly cookie**. Page JavaScript can't read it, so even an XSS bug couldn't steal it.
+- Every transaction query includes the logged-in user's id, so one user can't read, edit or delete another user's data even by guessing an id.
 
-- [ ] Backend with Node.js, Express and MongoDB so data is stored online
-- [ ] Login, so friends can use it with their own accounts
-- [ ] AI features: auto-pick the category from the description, and ask questions like "how much did I spend on food this month?"
-- [ ] Deploy the full version
+### "Ask about your money" (RAG)
+
+RAG = retrieval-augmented generation: instead of letting the AI guess, we first **retrieve** the user's real data and give it to the AI to **generate** an answer from.
+
+1. **Plan:** Gemini turns the question into filters: dates, income/expense, categories, and optional search text (e.g. "Goa trip").
+2. **Retrieve:** the server queries MongoDB with those filters. If there is search text, transactions are ranked by **embedding similarity** (meaning, not exact words), and Gemini picks the ones that really match.
+3. **Calculate:** the server adds up the totals. LLMs make arithmetic mistakes, so the AI never does the math.
+4. **Answer:** Gemini writes a 1–3 sentence reply using only those facts.
+
+Everything the AI returns is checked like user input (valid dates, known categories only), and embeddings are saved after the first search so they are never paid for twice.
+
+### Category suggestions
+Simple keyword rules run first ("swiggy" → Food & Dining). They're instant and free. Gemini is only asked when the rules don't know.
+
+## Run it locally
+
+You need Node.js 22 or newer.
+
+```bash
+git clone https://github.com/sk7245/expenses-tracker.git
+cd expenses-tracker
+npm install
+npm run dev
+```
+
+Open http://localhost:3000.
+
+- Without a `MONGODB_URI`, a local MongoDB starts automatically and keeps data in `.data/`.
+- Without a `GEMINI_API_KEY`, the app works fully; auto category uses keyword rules only, and scan/ask are hidden.
+
+To use real services, copy `.env.example` to `.env` and fill it in.
+
+## Tests
+
+```bash
+npm test
+```
+
+25 tests cover login, validation, users not seeing each other's data, monthly totals, and the AI pipeline (with a fake Gemini, so no API key or internet is needed).
+
+## Deploy (Render + MongoDB Atlas)
+
+1. Create a free MongoDB Atlas cluster and copy its connection string.
+2. Get a free Gemini API key from Google AI Studio.
+3. On Render: **New → Blueprint**, pick this repo. `render.yaml` sets up the service.
+4. Enter `MONGODB_URI` and `GEMINI_API_KEY` when Render asks. `JWT_SECRET` is generated automatically.
+
+The free Render plan sleeps when unused, so the first visit after a while takes about 30–50 seconds.
+
+## Project structure
+
+```
+public/            frontend: login page, app page, styles
+src/
+  app.js           express setup, security headers, rate limits
+  server.js        starts the server
+  routes/          auth, transactions, ai
+  models/          User, Transaction (mongoose)
+  middleware/      login check
+  ai/              gemini client, rules, categorize, receipt scan, ask (RAG), embeddings
+  lib/             validation, dates, categories
+tests/             api and ai tests
+```
+
+## Ideas for later
+
+- Monthly budgets with alerts
+- Export to CSV / Excel
+- Recurring expenses (rent, subscriptions)
+- React frontend

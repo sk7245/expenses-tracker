@@ -168,6 +168,12 @@ select:focus {
     cursor: pointer;
 }
 
+.type-toggle input:checked + label {
+    background-color: white;
+    color: var(--primary);
+    font-weight: 600;
+}
+
 #type-expense:checked + label {
     background-color: white;
     color: var(--expense);
