@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <h1>Expenses Tracker</h1>
+            <p class="tagline">Know where every rupee goes</p>
+        </header>
+
+        <!-- balance for the selected month -->
+        <section class="balance-card">
+            <p>Balance · <span id="current-month"></span></p>
+            <h2 id="balance">₹0</h2>
+        </section>
+
+        <section class="summary">
+            <div class="summary-box">
+                <p>Income</p>
+                <p id="total-income" class="money income-text">₹0</p>
+            </div>
+            <div class="summary-box">
+                <p>Spent</p>
+                <p id="total-expense" class="money expense-text">₹0</p>
+            </div>
+        </section>
+
+        <!-- add transaction form -->
+        <section>
+            <h3>Add transaction</h3>
+            <form id="transaction-form">
+
+                <!-- expense or income toggle -->
+                <div class="type-toggle">
+                    <input type="radio" name="type" id="type-expense" value="expense" checked>
+                    <label for="type-expense">Expense</label>
+                    <input type="radio" name="type" id="type-income" value="income">
+                    <label for="type-income">Income</label>
+                </div>
+
+                <label for="description">Description</label>
+                <input type="text" id="description" placeholder="e.g. Swiggy order, Rent, Salary" maxlength="60">
+
+                <div class="row">
+                    <div>
+                        <label for="amount">Amount (₹)</label>
+                        <input type="number" id="amount" placeholder="0" min="1" step="0.01">
+                    </div>
+                    <div>
+                        <label for="date">Date</label>
+                        <input type="date" id="date">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <label for="category">Category</label>
+                        <select id="category">
+                            <optgroup label="Expense" id="expense-categories">
+                                <option value="Food & Dining">Food & Dining</option>
+                                <option value="Groceries">Groceries</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Fuel">Fuel</option>
+                                <option value="Rent">Rent</option>
+                                <option value="Bills & Recharge">Bills & Recharge</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Health">Health</option>
+                                <option value="Education">Education</option>
+                                <option value="EMI & Loans">EMI & Loans</option>
+                                <option value="Other Expense">Other</option>
+                            </optgroup>
+                            <optgroup label="Income" id="income-categories">
+                                <option value="Salary">Salary</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Business">Business</option>
+                                <option value="Interest & Returns">Interest & Returns</option>
+                                <option value="Gift">Gift</option>
+                                <option value="Other Income">Other</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="payment-mode" id="payment-label">Paid via</label>
+                        <select id="payment-mode">
+                            <option value="UPI">UPI</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Debit Card">Debit Card</option>
+                            <option value="Credit Card">Credit Card</option>
+                            <option value="Net Banking">Net Banking</option>
+                        </select>
+                    </div>
+                </div>
+
+                <p id="form-error" class="form-error" hidden></p>
+
+                <button type="submit" id="add-btn" class="add-btn">Add Transaction</button>
+            </form>
+        </section>
+
+        <!-- history -->
+        <section>
+            <div class="history-header">
+                <h3>History</h3>
+                <div class="filters">
+                    <input type="month" id="filter-month" class="filter">
+                    <select id="filter-category" class="filter">
+                        <option value="All">All categories</option>
+                        <optgroup label="Expense">
+                            <option value="Food & Dining">Food & Dining</option>
+                            <option value="Groceries">Groceries</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Fuel">Fuel</option>
+                            <option value="Rent">Rent</option>
+                            <option value="Bills & Recharge">Bills & Recharge</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Health">Health</option>
+                            <option value="Education">Education</option>
+                            <option value="EMI & Loans">EMI & Loans</option>
+                            <option value="Other Expense">Other</option>
+                        </optgroup>
+                        <optgroup label="Income">
+                            <option value="Salary">Salary</option>
+                            <option value="Freelance">Freelance</option>
+                            <option value="Business">Business</option>
+                            <option value="Interest & Returns">Interest & Returns</option>
+                            <option value="Gift">Gift</option>
+                            <option value="Other Income">Other</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <!-- javascript fills this list -->
+            <ul id="transaction-list"></ul>
+
+            <p id="empty-message" class="empty-message" hidden>Nothing here yet. Add your first transaction above.</p>
+        </section>
+
+    </div>
+</body>
+
+</html>
