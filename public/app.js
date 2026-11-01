@@ -568,6 +568,7 @@ async function start() {
         return;
     }
 
+    document.getElementById("app").hidden = false;
     document.getElementById("user-name").textContent = `Hi, ${user.name.split(" ")[0]}`;
 
     try {

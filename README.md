@@ -2,7 +2,7 @@
 
 A web app to track monthly income and spending, built for me and my friends. Each person has their own account, and AI helps with the boring parts: picking categories, reading bills, and answering questions like *"how much did I spend on food last month?"*
 
-**Live demo:** _coming soon_
+**Live demo:** https://expenses-tracker-xaiw.onrender.com (free hosting, so the first load can take up to a minute)
 
 ## Features
 
