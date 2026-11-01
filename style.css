@@ -1,0 +1,313 @@
+/* colors I use everywhere in the app */
+:root {
+    --primary: #0f766e;
+    --primary-light: #e6f4f2;
+    --bg: #eef3f2;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #dbe3e1;
+    --expense: #dc2626;
+    --income: #16a34a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+.container {
+    max-width: 460px;
+    margin: 32px auto;
+    padding: 24px;
+    background-color: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+header {
+    margin-bottom: 18px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+    color: var(--primary);
+}
+
+.tagline {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+h3 {
+    margin: 24px 0 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* balance card */
+.balance-card {
+    padding: 18px 20px;
+    border-radius: 12px;
+    background-color: var(--primary);
+    color: white;
+}
+
+.balance-card p {
+    margin: 0;
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+.balance-card h2 {
+    margin: 4px 0 0;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+/* income and spent boxes */
+.summary {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.summary-box {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.summary-box p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.summary-box .money {
+    margin-top: 2px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.income-text {
+    color: var(--income) !important;
+}
+
+.expense-text {
+    color: var(--expense) !important;
+}
+
+/* form */
+label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 9px 11px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    background-color: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* two fields side by side */
+.row {
+    display: flex;
+    gap: 12px;
+}
+
+.row > div {
+    flex: 1;
+}
+
+/* expense / income switch - the radio circles are hidden, labels act as buttons */
+.type-toggle {
+    display: flex;
+    margin-bottom: 14px;
+    padding: 4px;
+    background-color: var(--bg);
+    border-radius: 10px;
+}
+
+.type-toggle input {
+    display: none;
+}
+
+.type-toggle label {
+    flex: 1;
+    margin: 0;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--muted);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#type-expense:checked + label {
+    background-color: white;
+    color: var(--expense);
+    font-weight: 600;
+}
+
+#type-income:checked + label {
+    background-color: white;
+    color: var(--income);
+    font-weight: 600;
+}
+
+button {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+}
+
+.add-btn {
+    width: 100%;
+    padding: 11px;
+    font-size: 15px;
+    font-weight: 500;
+    color: white;
+    background-color: var(--primary);
+    border-radius: 8px;
+}
+
+.add-btn:hover {
+    background-color: #115e59;
+}
+
+/* history */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.filters {
+    display: flex;
+    gap: 6px;
+}
+
+.filter {
+    width: auto;
+    margin: 0;
+    padding: 6px 8px;
+    font-size: 12px;
+}
+
+.form-error {
+    margin: 0 0 12px;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: var(--expense);
+    background-color: #fdecec;
+    border-radius: 8px;
+}
+
+#transaction-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.transaction {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.transaction:last-child {
+    border-bottom: none;
+}
+
+.info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.meta {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.amount {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--expense);
+}
+
+.transaction.income .amount {
+    color: var(--income);
+}
+
+/* delete button only shows when you hover a row */
+.delete-btn {
+    padding: 2px 6px;
+    font-size: 12px;
+    color: var(--muted);
+    background: none;
+    visibility: hidden;
+}
+
+.delete-btn:hover {
+    color: var(--expense);
+}
+
+.transaction:hover .delete-btn {
+    visibility: visible;
+}
+
+.empty-message {
+    padding: 20px 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* phone screens */
+@media (max-width: 480px) {
+    .container {
+        margin: 0;
+        min-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    /* no hover on phones, so always show delete */
+    .delete-btn {
+        visibility: visible;
+    }
+}
