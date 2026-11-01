@@ -1,14 +1,15 @@
-/* colors I use everywhere in the app */
+/* colors */
 :root {
-    --primary: #0f766e;
-    --primary-light: #e6f4f2;
-    --bg: #eef3f2;
-    --card: #ffffff;
-    --text: #1e293b;
-    --muted: #64748b;
-    --border: #dbe3e1;
-    --expense: #dc2626;
-    --income: #16a34a;
+    --blue: #1f4e8c;
+    --blue-dark: #173b6b;
+    --blue-light: #eef3f9;
+    --bg: #f3f5f8;
+    --white: #ffffff;
+    --text: #222222;
+    --muted: #666666;
+    --border: #d4dae2;
+    --expense: #b3261e;
+    --income: #2e7d32;
 }
 
 * {
@@ -17,28 +18,30 @@
 
 body {
     margin: 0;
-    font-family: "Poppins", "Segoe UI", sans-serif;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 15px;
     background-color: var(--bg);
     color: var(--text);
 }
 
 .container {
-    max-width: 460px;
-    margin: 32px auto;
-    padding: 24px;
-    background-color: var(--card);
-    border-radius: 14px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-}
-
-header {
-    margin-bottom: 18px;
+    max-width: 480px;
+    margin: 24px auto;
+    padding: 20px;
+    background-color: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
 }
 
 h1 {
     margin: 0;
-    font-size: 24px;
-    color: var(--primary);
+    font-size: 22px;
+    color: var(--blue);
+}
+
+h3 {
+    margin: 22px 0 10px;
+    font-size: 16px;
 }
 
 .tagline {
@@ -47,44 +50,54 @@ h1 {
     color: var(--muted);
 }
 
-h3 {
-    margin: 24px 0 12px;
-    font-size: 16px;
-    font-weight: 600;
+/* header */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--blue);
 }
 
-/* balance card */
+.user-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* balance */
 .balance-card {
-    padding: 18px 20px;
-    border-radius: 12px;
-    background-color: var(--primary);
-    color: white;
+    padding: 14px 16px;
+    background-color: var(--blue);
+    color: var(--white);
+    border-radius: 4px;
 }
 
 .balance-card p {
     margin: 0;
     font-size: 13px;
-    opacity: 0.85;
 }
 
 .balance-card h2 {
     margin: 4px 0 0;
-    font-size: 30px;
-    font-weight: 600;
+    font-size: 28px;
 }
 
-/* income and spent boxes */
 .summary {
     display: flex;
-    gap: 12px;
-    margin-top: 12px;
+    gap: 10px;
+    margin-top: 10px;
 }
 
 .summary-box {
     flex: 1;
-    padding: 12px 14px;
+    padding: 10px 12px;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 4px;
 }
 
 .summary-box p {
@@ -112,45 +125,60 @@ label {
     display: block;
     margin-bottom: 4px;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 input,
 select {
     width: 100%;
-    padding: 9px 11px;
+    padding: 8px 10px;
     margin-bottom: 12px;
     font-size: 14px;
     font-family: inherit;
     color: var(--text);
-    background-color: white;
+    background-color: var(--white);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 4px;
 }
 
 input:focus,
 select:focus {
-    outline: none;
-    border-color: var(--primary);
+    outline: 2px solid var(--blue);
+    outline-offset: -1px;
 }
 
-/* two fields side by side */
 .row {
     display: flex;
-    gap: 12px;
+    gap: 10px;
 }
 
 .row > div {
     flex: 1;
 }
 
-/* expense / income switch - the radio circles are hidden, labels act as buttons */
+.hint {
+    margin: -6px 0 12px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.form-error {
+    margin: 0 0 12px;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: var(--expense);
+    background-color: #fbeceb;
+    border: 1px solid #efc7c4;
+    border-radius: 4px;
+}
+
+/* expense / income switch: the radio circles are hidden, the labels act as buttons */
 .type-toggle {
     display: flex;
     margin-bottom: 14px;
-    padding: 4px;
-    background-color: var(--bg);
-    border-radius: 10px;
+    border: 1px solid var(--blue);
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 .type-toggle input {
@@ -163,29 +191,18 @@ select:focus {
     padding: 8px;
     text-align: center;
     font-size: 14px;
-    color: var(--muted);
-    border-radius: 8px;
+    font-weight: normal;
+    color: var(--blue);
     cursor: pointer;
 }
 
 .type-toggle input:checked + label {
-    background-color: white;
-    color: var(--primary);
+    background-color: var(--blue);
+    color: var(--white);
     font-weight: 600;
 }
 
-#type-expense:checked + label {
-    background-color: white;
-    color: var(--expense);
-    font-weight: 600;
-}
-
-#type-income:checked + label {
-    background-color: white;
-    color: var(--income);
-    font-weight: 600;
-}
-
+/* buttons */
 button {
     font-family: inherit;
     border: none;
@@ -194,161 +211,64 @@ button {
 
 .add-btn {
     width: 100%;
-    padding: 11px;
+    padding: 10px;
     font-size: 15px;
-    font-weight: 500;
-    color: white;
-    background-color: var(--primary);
-    border-radius: 8px;
-}
-
-.add-btn:hover {
-    background-color: #115e59;
-}
-
-/* history */
-.history-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-}
-
-.filters {
-    display: flex;
-    gap: 6px;
-}
-
-.filter {
-    width: auto;
-    margin: 0;
-    padding: 6px 8px;
-    font-size: 12px;
-}
-
-.form-error {
-    margin: 0 0 12px;
-    padding: 8px 10px;
-    font-size: 13px;
-    color: var(--expense);
-    background-color: #fdecec;
-    border-radius: 8px;
-}
-
-#transaction-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.transaction {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
-}
-
-.transaction:last-child {
-    border-bottom: none;
-}
-
-.info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.name {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.meta {
-    font-size: 12px;
-    color: var(--muted);
-}
-
-.amount {
-    font-size: 14px;
     font-weight: 600;
-    color: var(--expense);
+    color: var(--white);
+    background-color: var(--blue);
+    border-radius: 4px;
 }
 
-.transaction.income .amount {
-    color: var(--income);
-}
-
-/* delete button only shows when you hover a row */
-.delete-btn {
-    padding: 2px 6px;
-    font-size: 12px;
-    color: var(--muted);
-    background: none;
-    visibility: hidden;
-}
-
-.delete-btn:hover {
-    color: var(--expense);
-}
-
-.transaction:hover .delete-btn {
-    visibility: visible;
-}
-
-.empty-message {
-    padding: 20px 0;
-    text-align: center;
-    font-size: 14px;
-    color: var(--muted);
-}
-
-/* top bar with the user's name */
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.user-box {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    font-size: 13px;
-    color: var(--muted);
-}
-
-.link-btn {
-    padding: 0;
-    font-size: 13px;
-    color: var(--primary);
-    background: none;
-}
-
-.link-btn:hover {
-    text-decoration: underline;
+.add-btn:hover,
+.small-btn:hover {
+    background-color: var(--blue-dark);
 }
 
 .small-btn {
-    padding: 8px 14px;
+    padding: 7px 14px;
     font-size: 13px;
-    font-weight: 500;
-    color: white;
-    background-color: var(--primary);
-    border-radius: 8px;
+    font-weight: 600;
+    color: var(--white);
+    background-color: var(--blue);
+    border-radius: 4px;
 }
 
 .small-btn.outline {
-    color: var(--primary);
-    background-color: white;
-    border: 1px solid var(--primary);
+    color: var(--blue);
+    background-color: var(--white);
+    border: 1px solid var(--blue);
+}
+
+.small-btn.outline:hover {
+    background-color: var(--blue-light);
 }
 
 .small-btn:disabled,
 .add-btn:disabled {
     opacity: 0.6;
     cursor: wait;
+}
+
+.link-btn {
+    padding: 0;
+    font-size: 13px;
+    color: var(--blue);
+    background: none;
+    text-decoration: underline;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.cancel-btn {
+    padding: 10px 16px;
+    font-size: 15px;
+    color: var(--text);
+    background-color: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
 }
 
 .section-header {
@@ -358,19 +278,14 @@ button {
     gap: 12px;
 }
 
-.hint {
-    margin: -6px 0 12px;
-    font-size: 12px;
-    color: var(--muted);
-}
-
-/* banner for importing old data */
+/* import banner */
 .banner {
     margin-bottom: 14px;
-    padding: 12px 14px;
+    padding: 10px 12px;
     font-size: 13px;
-    background-color: var(--primary-light);
-    border-radius: 10px;
+    background-color: var(--blue-light);
+    border: 1px solid var(--border);
+    border-radius: 4px;
 }
 
 .banner p {
@@ -383,16 +298,17 @@ button {
     gap: 14px;
 }
 
-/* ask AI */
+/* ask about your money */
 .ask-card {
     margin-top: 16px;
-    padding: 4px 16px 16px;
-    background-color: var(--primary-light);
-    border-radius: 12px;
+    padding: 2px 14px 14px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    border-radius: 4px;
 }
 
 .ask-card h3 {
-    margin-top: 14px;
+    margin-top: 12px;
 }
 
 .ask-form {
@@ -406,30 +322,35 @@ button {
 
 .chips {
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
     margin-top: 10px;
+    font-size: 13px;
 }
 
 .chip {
-    padding: 5px 10px;
-    font-size: 12px;
-    color: var(--primary);
-    background-color: white;
-    border: 1px solid var(--border);
-    border-radius: 999px;
+    padding: 0;
+    font-size: 13px;
+    color: var(--blue);
+    background: none;
+    text-align: left;
+}
+
+.chip::before {
+    content: "→ ";
 }
 
 .chip:hover {
-    border-color: var(--primary);
+    text-decoration: underline;
 }
 
 .ask-result {
     margin-top: 12px;
-    padding: 12px;
+    padding: 10px 12px;
     font-size: 14px;
-    background-color: white;
-    border-radius: 8px;
+    background-color: var(--blue-light);
+    border-radius: 4px;
 }
 
 .ask-result p {
@@ -448,13 +369,13 @@ button {
     color: var(--muted);
 }
 
-/* spending by category bars */
+/* spending by category */
 .bar-row {
     display: grid;
     grid-template-columns: 110px 1fr auto;
     align-items: center;
     gap: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-size: 13px;
 }
 
@@ -465,15 +386,15 @@ button {
 }
 
 .bar-track {
-    height: 8px;
-    background-color: var(--bg);
-    border-radius: 999px;
+    height: 10px;
+    background-color: var(--blue-light);
+    border-radius: 2px;
 }
 
 .bar-fill {
     height: 100%;
-    background-color: var(--primary);
-    border-radius: 999px;
+    background-color: var(--blue);
+    border-radius: 2px;
 }
 
 .bar-amount {
@@ -482,21 +403,61 @@ button {
     white-space: nowrap;
 }
 
-/* add / cancel buttons */
-.form-buttons {
+/* history */
+.filters {
     display: flex;
+    gap: 6px;
+}
+
+.filter {
+    width: auto;
+    margin: 0;
+    padding: 5px 8px;
+    font-size: 12px;
+}
+
+#transaction-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--border);
+}
+
+.transaction {
+    display: flex;
+    align-items: center;
     gap: 10px;
+    padding: 10px 4px;
+    border-bottom: 1px solid var(--border);
 }
 
-.cancel-btn {
-    padding: 11px 16px;
-    font-size: 15px;
-    color: var(--text);
-    background-color: var(--bg);
-    border-radius: 8px;
+.info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-/* edit + delete buttons in each row, shown on hover */
+.name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.meta {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.amount {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--expense);
+}
+
+.transaction.income .amount {
+    color: var(--income);
+}
+
+/* edit and delete buttons in each row, shown on hover */
 .row-btn {
     padding: 2px 6px;
     font-size: 13px;
@@ -506,7 +467,7 @@ button {
 }
 
 .row-btn:hover {
-    color: var(--primary);
+    color: var(--blue);
 }
 
 .row-btn.delete-btn:hover {
@@ -517,6 +478,13 @@ button {
     visibility: visible;
 }
 
+.empty-message {
+    padding: 20px 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--muted);
+}
+
 /* login page */
 .auth-card {
     max-width: 380px;
@@ -524,8 +492,10 @@ button {
 }
 
 .auth-card header {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
     text-align: center;
-    margin-bottom: 22px;
+    border-bottom: 2px solid var(--blue);
 }
 
 .auth-card .hint {
@@ -537,17 +507,17 @@ button {
     .container {
         margin: 0;
         min-height: 100vh;
+        border: none;
         border-radius: 0;
-        box-shadow: none;
+    }
+
+    .auth-card {
+        margin-top: 0;
     }
 
     /* no hover on phones, so always show edit and delete */
     .row-btn {
         visibility: visible;
-    }
-
-    .auth-card {
-        margin-top: 0;
     }
 
     .bar-row {
