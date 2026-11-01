@@ -7,12 +7,17 @@ async function start() {
     console.log("Connected to MongoDB");
 
     const app = createApp();
-    app.listen(config.port, () => {
+    const server = app.listen(config.port, () => {
         console.log(`Expenses Tracker running at http://localhost:${config.port}`);
         if (!config.geminiApiKey) {
             console.log("GEMINI_API_KEY not set - category suggestions use keyword rules only, other AI features are off");
         }
     });
+
+    // Render's load balancer keeps idle connections open longer than Node's default 5 seconds.
+    // If Node closes first, the balancer can send a request into a dead connection -> random 502 errors.
+    server.keepAliveTimeout = 120 * 1000;
+    server.headersTimeout = 121 * 1000;
 }
 
 async function shutdown() {
