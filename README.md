@@ -14,6 +14,12 @@ A web app to track monthly income and spending, built for me and my friends. Eac
 - Filter history by month and category
 - Works on phones
 
+**Loans & dues**
+- Track money you borrowed (loan apps, friends, bank loans, credit card) and money you lent
+- Pay back in parts: each payment is saved, with a progress bar and how much is left
+- "You owe" and "Others owe you" totals, due dates, and overdue loans shown in red
+- Undo a payment entered by mistake; paid-off loans are hidden until you ask for them
+
 **AI** (Google Gemini)
 - **Auto category**: type "Swiggy biryani" and Food & Dining is picked for you
 - **Scan a bill**: take a photo of a bill or UPI payment screenshot and the form fills itself
@@ -82,7 +88,7 @@ To use real services, copy `.env.example` to `.env` and fill it in.
 npm test
 ```
 
-25 tests cover login, validation, users not seeing each other's data, monthly totals, and the AI pipeline (with a fake Gemini, so no API key or internet is needed).
+31 tests cover login, validation, users not seeing each other's data, monthly totals, loan repayments, and the AI pipeline (with a fake Gemini, so no API key or internet is needed).
 
 ## Deploy (Render + MongoDB Atlas)
 
@@ -100,12 +106,12 @@ public/            frontend: login page, app page, styles
 src/
   app.js           express setup, security headers, rate limits
   server.js        starts the server
-  routes/          auth, transactions, ai
-  models/          User, Transaction (mongoose)
+  routes/          auth, transactions, debts, ai
+  models/          User, Transaction, Debt (mongoose)
   middleware/      login check
   ai/              gemini client, rules, categorize, receipt scan, ask (RAG), embeddings
   lib/             validation, dates, categories
-tests/             api and ai tests
+tests/             api, loans and ai tests
 ```
 
 ## Ideas for later

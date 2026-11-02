@@ -16,6 +16,11 @@
     box-sizing: border-box;
 }
 
+/* display: flex on a class would otherwise beat the hidden attribute */
+[hidden] {
+    display: none !important;
+}
+
 body {
     margin: 0;
     font-family: "Segoe UI", Roboto, Arial, sans-serif;
@@ -483,6 +488,125 @@ button {
     text-align: center;
     font-size: 14px;
     color: var(--muted);
+}
+
+/* loans & dues */
+.debt-form {
+    margin-top: 14px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+#debt-list {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--border);
+}
+
+.debt {
+    padding: 12px 4px;
+    border-bottom: 1px solid var(--border);
+}
+
+.debt-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.debt-money {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    white-space: nowrap;
+}
+
+.debt.lent .amount {
+    color: var(--income);
+}
+
+.debt.settled .amount {
+    color: var(--muted);
+}
+
+.debt .note {
+    font-style: italic;
+}
+
+.debt .bar-track {
+    height: 6px;
+    margin: 8px 0;
+}
+
+.debt.overdue .details {
+    color: var(--expense);
+}
+
+.debt-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.debt-actions .small-btn {
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+.debt-actions .spacer {
+    flex: 1;
+}
+
+.link-btn.danger {
+    color: var(--expense);
+}
+
+.pay-form {
+    margin-top: 10px;
+}
+
+.pay-fields {
+    display: flex;
+    gap: 8px;
+}
+
+.pay-fields input {
+    margin: 0;
+}
+
+.pay-form .form-error {
+    margin: 8px 0 0;
+}
+
+.payment-list {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.payment-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+
+.check-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-weight: normal;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.check-label input {
+    width: auto;
+    margin: 0;
 }
 
 /* login page */

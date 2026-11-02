@@ -1,4 +1,4 @@
-const { PAYMENT_MODES, TYPES, isValidCategory } = require("./categories");
+const { PAYMENT_MODES, TYPES, DEBT_DIRECTIONS, DEBT_SOURCES, isValidCategory } = require("./categories");
 const { isValidDate, today, addDays } = require("./dates");
 
 const MAX_AMOUNT = 100000000; // ₹10 crore - anything above is almost surely a typo
@@ -43,6 +43,63 @@ function validateTransaction(body) {
     };
 }
 
+function checkAmount(value) {
+    const amount = Number(value);
+    if (!Number.isFinite(amount) || amount <= 0) return { error: "Amount must be greater than 0" };
+    if (amount > MAX_AMOUNT) return { error: "Amount is too large" };
+    return { amount: Math.round(amount * 100) / 100 };
+}
+
+function checkPastDate(date, label) {
+    if (!isValidDate(date)) return `${label} must be a valid date (YYYY-MM-DD)`;
+    if (date > addDays(today(), 1)) return `${label} can't be in the future`;
+    return null;
+}
+
+// a loan, or money borrowed from / lent to someone. The due date is optional and can be in the future.
+function validateDebt(body) {
+    if (!body || typeof body !== "object") return { error: "Invalid data" };
+
+    if (!DEBT_DIRECTIONS.includes(body.direction)) return { error: "Choose borrowed or lent" };
+
+    const person = typeof body.person === "string" ? body.person.trim() : "";
+    if (person.length === 0) return { error: "Who is it with? Enter a name or app" };
+    if (person.length > 50) return { error: "Name must be 50 characters or less" };
+
+    if (!DEBT_SOURCES.includes(body.source)) return { error: "Invalid loan type" };
+
+    const { amount, error } = checkAmount(body.amount);
+    if (error) return { error };
+
+    const dateError = checkPastDate(body.date, "Date");
+    if (dateError) return { error: dateError };
+
+    let dueDate = null;
+    if (body.dueDate) {
+        if (!isValidDate(body.dueDate)) return { error: "Due date must be a valid date (YYYY-MM-DD)" };
+        if (body.dueDate < body.date) return { error: "Due date can't be before the loan date" };
+        dueDate = body.dueDate;
+    }
+
+    const note = typeof body.note === "string" ? body.note.trim() : "";
+    if (note.length > 100) return { error: "Note must be 100 characters or less" };
+
+    return { value: { direction: body.direction, person, source: body.source, amount, date: body.date, dueDate, note } };
+}
+
+// one repayment towards a loan
+function validatePayment(body) {
+    if (!body || typeof body !== "object") return { error: "Invalid data" };
+
+    const { amount, error } = checkAmount(body.amount);
+    if (error) return { error };
+
+    const dateError = checkPastDate(body.date, "Date");
+    if (dateError) return { error: dateError };
+
+    return { value: { amount, date: body.date } };
+}
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function validateRegister(body) {
@@ -59,4 +116,4 @@ function validateRegister(body) {
     return { value: { name, email, password } };
 }
 
-module.exports = { validateTransaction, validateRegister };
+module.exports = { validateTransaction, validateRegister, validateDebt, validatePayment };

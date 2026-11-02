@@ -8,6 +8,7 @@ const HttpError = require("./lib/httpError");
 const authRoutes = require("./routes/auth");
 const transactionRoutes = require("./routes/transactions");
 const aiRoutes = require("./routes/ai");
+const debtRoutes = require("./routes/debts");
 
 function createApp() {
     const app = express();
@@ -55,6 +56,7 @@ function createApp() {
     app.use("/api/auth", authRoutes);
     app.use("/api/transactions", transactionRoutes);
     app.use("/api/ai", aiRoutes);
+    app.use("/api/debts", debtRoutes);
 
     app.get("/api/health", (req, res) => res.json({ ok: true }));
 

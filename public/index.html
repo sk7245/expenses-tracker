@@ -198,6 +198,88 @@
             <p id="empty-message" class="empty-message" hidden>Nothing here yet. Add your first transaction above.</p>
         </section>
 
+        <!-- loans: money borrowed (loan apps, friends, bank) and money lent -->
+        <section id="debts">
+            <div class="section-header">
+                <h3>Loans & dues</h3>
+                <button type="button" id="debt-add-btn" class="small-btn outline">+ Add</button>
+            </div>
+
+            <div class="summary">
+                <div class="summary-box">
+                    <p>You owe</p>
+                    <p id="debt-owe" class="money expense-text">₹0</p>
+                </div>
+                <div class="summary-box">
+                    <p>Others owe you</p>
+                    <p id="debt-owed" class="money income-text">₹0</p>
+                </div>
+            </div>
+
+            <form id="debt-form" class="debt-form" hidden>
+                <div class="type-toggle">
+                    <input type="radio" name="direction" id="dir-borrowed" value="borrowed" checked>
+                    <label for="dir-borrowed">I borrowed</label>
+                    <input type="radio" name="direction" id="dir-lent" value="lent">
+                    <label for="dir-lent">I lent</label>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <label for="debt-person" id="debt-person-label">From whom</label>
+                        <input type="text" id="debt-person" placeholder="e.g. Rahul, KreditBee, SBI" maxlength="50" autocomplete="off">
+                    </div>
+                    <div>
+                        <label for="debt-source">Type</label>
+                        <select id="debt-source">
+                            <option value="Friend or family">Friend or family</option>
+                            <option value="Loan app">Loan app</option>
+                            <option value="Bank loan">Bank loan</option>
+                            <option value="Credit card">Credit card</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <label for="debt-amount">Amount to pay back (₹)</label>
+                        <input type="number" id="debt-amount" placeholder="0" min="0.01" step="0.01">
+                    </div>
+                    <div>
+                        <label for="debt-date">Taken on</label>
+                        <input type="date" id="debt-date">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <label for="debt-due">Due date (optional)</label>
+                        <input type="date" id="debt-due">
+                    </div>
+                    <div>
+                        <label for="debt-note">Note (optional)</label>
+                        <input type="text" id="debt-note" placeholder="e.g. 3 EMIs of ₹1,800" maxlength="100" autocomplete="off">
+                    </div>
+                </div>
+                <p class="hint">Include interest in the amount if you know it.</p>
+
+                <p id="debt-error" class="form-error" hidden></p>
+
+                <div class="form-buttons">
+                    <button type="submit" id="debt-save" class="add-btn">Save</button>
+                    <button type="button" id="debt-cancel" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+
+            <ul id="debt-list"></ul>
+            <p id="debt-empty" class="empty-message" hidden>No loans or dues. Add one if you borrowed or lent money.</p>
+
+            <label class="check-label" id="show-settled-label" hidden>
+                <input type="checkbox" id="show-settled"> Show paid off (<span id="settled-count">0</span>)
+            </label>
+        </section>
+
     </div>
 </body>
 

@@ -1,4 +1,6 @@
 import { api } from "./api.js";
+import { todayString, formatMoney, formatDate } from "./format.js";
+import { startDebts } from "./debts.js";
 
 // data the old (browser-only) version saved
 const OLD_STORAGE_KEY = "expenses-tracker-transactions";
@@ -56,26 +58,6 @@ let suggestTimer = null;
 
 
 // ---- small helpers ----
-
-function todayString() {
-    const now = new Date();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    return `${now.getFullYear()}-${month}-${day}`;
-}
-
-// 150000 -> "₹1,50,000"
-function formatMoney(amount) {
-    const sign = amount < 0 ? "-" : "";
-    return sign + "₹" + Math.abs(amount).toLocaleString("en-IN", { maximumFractionDigits: 2 });
-}
-
-// "2026-11-05" -> "05 Nov"
-function formatDate(dateString, withYear = false) {
-    const [year, month, day] = dateString.split("-").map(Number);
-    const options = withYear ? { day: "2-digit", month: "short", year: "numeric" } : { day: "2-digit", month: "short" };
-    return new Date(year, month - 1, day).toLocaleDateString("en-IN", options);
-}
 
 // "2026-11" -> "November 2026"
 function formatMonth(monthString) {
@@ -583,6 +565,7 @@ async function start() {
     monthFilter.value = todayString().slice(0, 7);
     resetForm();
     checkForOldData();
+    startDebts(handleError);
     await loadMonth();
 }
 
