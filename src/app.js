@@ -63,7 +63,11 @@ function createApp() {
     app.use("/api", (req, res) => res.status(404).json({ error: "Not found" }));
 
     // the frontend (html, css, js)
-    app.use(express.static(path.join(__dirname, "..", "public")));
+    // the React frontend, built by `npm run build` into client/dist
+    const clientDist = path.join(__dirname, "..", "client", "dist");
+    app.use(express.static(clientDist));
+    // React draws every screen from one page, so any other address (like an old /login.html bookmark) gets that page
+    app.get("/{*path}", (req, res) => res.sendFile(path.join(clientDist, "index.html")));
 
     app.use(errorHandler);
 

@@ -5,7 +5,9 @@ services:
     name: expenses-tracker
     runtime: node
     plan: free
-    buildCommand: npm ci --omit=dev
+    # installs the packages (Vite and React are normal dependencies, so --omit=dev still has them),
+    # then builds the React app into client/dist for Express to serve
+    buildCommand: npm ci --omit=dev && npm run build
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:

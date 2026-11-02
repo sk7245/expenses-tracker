@@ -1,6 +1,6 @@
 # Expenses Tracker
 
-A web app to track monthly income and spending, built for me and my friends. Each person has their own account, and AI helps with the boring parts: picking categories, reading bills, and answering questions like *"how much did I spend on food last month?"*
+A MERN web app (MongoDB, Express, React, Node.js) to track spending, income, loans and EMIs, built for me and my friends. Each person has their own account, and AI helps with the boring parts: picking categories, reading bills, and answering questions like *"how much did I spend on food last month?"*
 
 **Live demo:** https://expenses-tracker-xaiw.onrender.com (free hosting, so the first load can take up to a minute)
 
@@ -31,7 +31,7 @@ A web app to track monthly income and spending, built for me and my friends. Eac
 
 | Part | Tech |
 |---|---|
-| Frontend | HTML, CSS, JavaScript (no framework) |
+| Frontend | React 19 (function components + hooks), built with Vite |
 | Backend | Node.js, Express 5 |
 | Database | MongoDB (Atlas) with Mongoose |
 | Auth | JWT in an httpOnly cookie, bcrypt password hashing |
@@ -68,16 +68,19 @@ Simple keyword rules run first ("swiggy" → Food & Dining). They're instant and
 
 ## Run it locally
 
-You need Node.js 22 or newer.
+You need Node.js 20 or newer.
 
 ```bash
 git clone https://github.com/sk7245/expenses-tracker.git
 cd expenses-tracker
 npm install
-npm run dev
+npm run build   # builds the React app into client/dist
+npm run dev     # starts the server
 ```
 
 Open http://localhost:3000.
+
+While changing the React code, also run `npm run dev:client` and open http://localhost:5173 instead: the page reloads on every save, and `/api` calls are passed through to the server on port 3000.
 
 - Without a `MONGODB_URI`, a local MongoDB starts automatically and keeps data in `.data/`.
 - Without a `GEMINI_API_KEY`, the app works fully; auto category uses keyword rules only, and scan/ask are hidden.
@@ -90,7 +93,7 @@ To use real services, copy `.env.example` to `.env` and fill it in.
 npm test
 ```
 
-31 tests cover login, validation, users not seeing each other's data, monthly totals, loan repayments, and the AI pipeline (with a fake Gemini, so no API key or internet is needed).
+32 tests cover login, validation, users not seeing each other's data, monthly totals, loan repayments, and the AI pipeline (with a fake Gemini, so no API key or internet is needed).
 
 ## Deploy (Render + MongoDB Atlas)
 
@@ -104,8 +107,16 @@ The free Render plan sleeps when unused, so the first visit after a while takes 
 ## Project structure
 
 ```
-public/            frontend: login page, app page, styles
-src/
+client/            React frontend (Vite)
+  index.html       the one page React draws into
+  src/
+    main.jsx       starts React
+    App.jsx        checks the login, shows LoginPage or Dashboard
+    components/    LoginPage, Dashboard, SpendingTab, TransactionForm, TransactionList,
+                   MonthSummary, Breakdown, AskBox, DebitsTab, DebtForm, DebtRow
+    api.js         one helper for every call to the backend
+    debtUtils.js   EMI date maths
+src/               Express backend
   app.js           express setup, security headers, rate limits
   server.js        starts the server
   routes/          auth, transactions, debts, ai
@@ -121,4 +132,3 @@ tests/             api, loans and ai tests
 - Monthly budgets with alerts
 - Export to CSV / Excel
 - Recurring expenses (rent, subscriptions)
-- React frontend
