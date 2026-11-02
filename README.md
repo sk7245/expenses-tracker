@@ -14,10 +14,12 @@ A web app to track monthly income and spending, built for me and my friends. Eac
 - Filter history by month and category
 - Works on phones
 
-**Loans & dues**
+**Debits & EMIs** (a separate tab, because paying an EMI isn't the same as spending)
 - Track money you borrowed (loan apps, friends, bank loans, credit card) and money you lent
+- Monthly EMIs: EMI amount and date, "next EMI due" / "this month's EMI paid", late EMIs in red
 - Pay back in parts: each payment is saved, with a progress bar and how much is left
-- "You owe" and "Others owe you" totals, due dates, and overdue loans shown in red
+- Totals: what you owe, your EMIs every month, and what others owe you
+- Typing an EMI or loan as an expense shows a hint to add it under Debits instead
 - Undo a payment entered by mistake; paid-off loans are hidden until you ask for them
 
 **AI** (Google Gemini)

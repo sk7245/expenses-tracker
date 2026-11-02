@@ -22,6 +22,10 @@ const debtSchema = new mongoose.Schema(
         date: { type: String, required: true, match: DATE },
         dueDate: { type: String, default: null, match: DATE },
         note: { type: String, default: "", trim: true, maxlength: 100 },
+        // monthly instalment, for loans paid as EMIs (null = paid back whenever)
+        emi: { type: Number, default: null, min: 0.01 },
+        // day of the month the EMI is due (1-31)
+        emiDay: { type: Number, default: null, min: 1, max: 31 },
         payments: { type: [paymentSchema], default: [] }
     },
     { timestamps: true }

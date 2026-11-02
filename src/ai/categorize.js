@@ -1,9 +1,14 @@
 const { generateJson, isAiEnabled } = require("./gemini");
-const { categoryFromRules } = require("./rules");
+const { categoryFromRules, looksLikeDebit } = require("./rules");
 const { categoriesFor } = require("../lib/categories");
 
 // rules first (free, instant), AI only when the rules don't know
 async function suggestCategory(description, type) {
+    // an EMI typed as an expense: no category, the page points the user to the Debits tab instead
+    if (type === "expense" && looksLikeDebit(description)) {
+        return { category: null, source: "rules", debit: true };
+    }
+
     const fromRules = categoryFromRules(description, type);
     if (fromRules) {
         return { category: fromRules, source: "rules" };

@@ -72,8 +72,30 @@ describe("debts", () => {
         const res = await agent.get("/api/debts");
         assert.equal(res.status, 200);
         assert.equal(res.body.debts.length, 3);
-        assert.deepEqual(res.body.totals, { iOwe: 5800, owedToMe: 1000 });
+        assert.deepEqual(res.body.totals, { iOwe: 5800, owedToMe: 1000, emiPerMonth: 0 });
         assert.equal(res.body.debts[0].user, undefined);
+    });
+
+    test("monthly EMIs add up, and the last EMI only counts what's left", async () => {
+        const agent = await signUp(app);
+
+        const bike = await agent.post("/api/debts").send(loan({ person: "Bajaj Finance", source: "Bank loan", amount: 36000, emi: 3000, emiDay: 5 }));
+        assert.equal(bike.status, 201);
+        assert.equal(bike.body.debt.emi, 3000);
+        assert.equal(bike.body.debt.emiDay, 5);
+
+        // no EMI day given -> the day the loan was taken
+        const phone = await agent.post("/api/debts").send(loan({ amount: 2000, emi: 1500, date: "2026-10-18" }));
+        assert.equal(phone.body.debt.emiDay, 18);
+        await agent.post(`/api/debts/${phone.body.debt.id}/payments`).send({ amount: 1500, date: today() });
+
+        const res = await agent.get("/api/debts");
+        assert.equal(res.body.totals.emiPerMonth, 3500, "3000 + the last 500 of the phone loan");
+
+        const tooBig = await agent.post("/api/debts").send(loan({ amount: 1000, emi: 2000 }));
+        assert.equal(tooBig.status, 400);
+        const badDay = await agent.post("/api/debts").send(loan({ emi: 500, emiDay: 40 }));
+        assert.equal(badDay.status, 400);
     });
 
     test("bad data is rejected", async () => {

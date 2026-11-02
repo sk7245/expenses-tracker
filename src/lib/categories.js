@@ -9,9 +9,12 @@ const EXPENSE_CATEGORIES = [
     "Entertainment",
     "Health",
     "Education",
-    "EMI & Loans",
     "Other Expense"
 ];
+
+// EMIs and loan repayments now live in the Debits tab, not in spending.
+// Still accepted so entries saved before that change can be shown and edited.
+const OLD_EXPENSE_CATEGORIES = ["EMI & Loans"];
 
 const INCOME_CATEGORIES = [
     "Salary",
@@ -35,11 +38,13 @@ function categoriesFor(type) {
 }
 
 function isValidCategory(type, category) {
+    if (type === "expense" && OLD_EXPENSE_CATEGORIES.includes(category)) return true;
     return categoriesFor(type).includes(category);
 }
 
 module.exports = {
     EXPENSE_CATEGORIES,
+    OLD_EXPENSE_CATEGORIES,
     INCOME_CATEGORIES,
     PAYMENT_MODES,
     TYPES,

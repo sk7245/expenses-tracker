@@ -540,7 +540,59 @@ button {
     margin: 8px 0;
 }
 
-.debt.overdue .details {
+.debt .status.late {
+    color: var(--expense);
+    font-weight: 600;
+}
+
+.debt .status.done {
+    color: var(--income);
+}
+
+/* spending / debits tabs */
+.tabs {
+    display: flex;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.tab {
+    padding: 8px 14px;
+    margin-bottom: -1px;
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+}
+
+.tab:hover {
+    color: var(--blue);
+}
+
+.tab.active {
+    font-weight: 600;
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+}
+
+/* same shape as the balance box, but light with a red amount, so a debt never looks like money you have */
+.debit-card {
+    padding: 14px 16px;
+    background-color: var(--blue-light);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    border-radius: 4px;
+}
+
+.debit-card p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.debit-card h2 {
+    margin: 4px 0 0;
+    font-size: 28px;
     color: var(--expense);
 }
 

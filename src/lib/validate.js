@@ -84,7 +84,22 @@ function validateDebt(body) {
     const note = typeof body.note === "string" ? body.note.trim() : "";
     if (note.length > 100) return { error: "Note must be 100 characters or less" };
 
-    return { value: { direction: body.direction, person, source: body.source, amount, date: body.date, dueDate, note } };
+    // optional monthly EMI. The EMI day defaults to the day of the month the loan was taken
+    let emi = null;
+    let emiDay = null;
+    if (body.emi) {
+        const check = checkAmount(body.emi);
+        if (check.error) return { error: "EMI must be greater than 0" };
+        if (check.amount > amount) return { error: "EMI can't be more than the total amount" };
+        emi = check.amount;
+
+        emiDay = body.emiDay ? Number(body.emiDay) : Number(body.date.slice(8, 10));
+        if (!Number.isInteger(emiDay) || emiDay < 1 || emiDay > 31) return { error: "EMI date must be a day from 1 to 31" };
+    }
+
+    return {
+        value: { direction: body.direction, person, source: body.source, amount, date: body.date, dueDate, note, emi, emiDay }
+    };
 }
 
 // one repayment towards a loan

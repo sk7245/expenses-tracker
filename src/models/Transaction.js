@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { EXPENSE_CATEGORIES, INCOME_CATEGORIES, PAYMENT_MODES } = require("../lib/categories");
+const { EXPENSE_CATEGORIES, OLD_EXPENSE_CATEGORIES, INCOME_CATEGORIES, PAYMENT_MODES } = require("../lib/categories");
 
 const transactionSchema = new mongoose.Schema(
     {
@@ -10,7 +10,7 @@ const transactionSchema = new mongoose.Schema(
         category: {
             type: String,
             required: true,
-            enum: [...EXPENSE_CATEGORIES, ...INCOME_CATEGORIES]
+            enum: [...EXPENSE_CATEGORIES, ...OLD_EXPENSE_CATEGORIES, ...INCOME_CATEGORIES]
         },
         paymentMode: { type: String, required: true, enum: PAYMENT_MODES },
         // kept as "YYYY-MM-DD" text, same as the date input gives us.

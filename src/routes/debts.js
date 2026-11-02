@@ -31,12 +31,18 @@ router.get("/", async (req, res) => {
 
     let iOwe = 0;
     let owedToMe = 0;
+    let emiPerMonth = 0;
     for (const d of debts) {
-        if (d.direction === "borrowed") iOwe += d.remaining;
-        else owedToMe += d.remaining;
+        if (d.direction === "borrowed") {
+            iOwe += d.remaining;
+            // the last EMI can be smaller than the usual one
+            if (d.emi) emiPerMonth += Math.min(d.emi, d.remaining);
+        } else {
+            owedToMe += d.remaining;
+        }
     }
 
-    res.json({ debts, totals: { iOwe: round(iOwe), owedToMe: round(owedToMe) } });
+    res.json({ debts, totals: { iOwe: round(iOwe), owedToMe: round(owedToMe), emiPerMonth: round(emiPerMonth) } });
 });
 
 router.post("/", async (req, res) => {

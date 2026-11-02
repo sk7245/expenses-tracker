@@ -33,6 +33,14 @@
             </div>
         </div>
 
+        <!-- spending and debits are kept apart: paying an EMI isn't the same as spending -->
+        <nav class="tabs">
+            <a href="#spending" class="tab" data-tab="spending">Spending</a>
+            <a href="#debits" class="tab" data-tab="debits">Debits & EMIs</a>
+        </nav>
+
+        <div id="tab-spending">
+
         <!-- balance for the selected month -->
         <section class="balance-card">
             <p>Balance · <span id="current-month"></span></p>
@@ -123,8 +131,9 @@
                                 <option value="Entertainment">Entertainment</option>
                                 <option value="Health">Health</option>
                                 <option value="Education">Education</option>
-                                <option value="EMI & Loans">EMI & Loans</option>
                                 <option value="Other Expense">Other</option>
+                                <!-- only for entries saved before EMIs moved to the Debits tab -->
+                                <option value="EMI & Loans" hidden>EMI & Loans (old)</option>
                             </optgroup>
                             <optgroup label="Income" id="income-categories">
                                 <option value="Salary">Salary</option>
@@ -177,7 +186,6 @@
                             <option value="Entertainment">Entertainment</option>
                             <option value="Health">Health</option>
                             <option value="Education">Education</option>
-                            <option value="EMI & Loans">EMI & Loans</option>
                             <option value="Other Expense">Other</option>
                         </optgroup>
                         <optgroup label="Income">
@@ -197,23 +205,30 @@
 
             <p id="empty-message" class="empty-message" hidden>Nothing here yet. Add your first transaction above.</p>
         </section>
+        </div>
 
-        <!-- loans: money borrowed (loan apps, friends, bank) and money lent -->
+        <!-- debits: loans, EMIs, loan apps, money borrowed from friends, and money lent -->
+        <div id="tab-debits" hidden>
+        <section class="debit-card">
+            <p>Total you owe</p>
+            <h2 id="debt-owe">₹0</h2>
+        </section>
+
+        <div class="summary">
+            <div class="summary-box">
+                <p>EMIs every month</p>
+                <p id="debt-emi-total" class="money expense-text">₹0</p>
+            </div>
+            <div class="summary-box">
+                <p>Others owe you</p>
+                <p id="debt-owed" class="money income-text">₹0</p>
+            </div>
+        </div>
+
         <section id="debts">
             <div class="section-header">
-                <h3>Loans & dues</h3>
+                <h3>Loans & EMIs</h3>
                 <button type="button" id="debt-add-btn" class="small-btn outline">+ Add</button>
-            </div>
-
-            <div class="summary">
-                <div class="summary-box">
-                    <p>You owe</p>
-                    <p id="debt-owe" class="money expense-text">₹0</p>
-                </div>
-                <div class="summary-box">
-                    <p>Others owe you</p>
-                    <p id="debt-owed" class="money income-text">₹0</p>
-                </div>
             </div>
 
             <form id="debt-form" class="debt-form" hidden>
@@ -243,7 +258,7 @@
 
                 <div class="row">
                     <div>
-                        <label for="debt-amount">Amount to pay back (₹)</label>
+                        <label for="debt-amount">Total to pay back (₹)</label>
                         <input type="number" id="debt-amount" placeholder="0" min="0.01" step="0.01">
                     </div>
                     <div>
@@ -251,18 +266,29 @@
                         <input type="date" id="debt-date">
                     </div>
                 </div>
+                <p class="hint">Include interest if you know it. For a loan already running, enter what's still left.</p>
 
                 <div class="row">
                     <div>
-                        <label for="debt-due">Due date (optional)</label>
+                        <label for="debt-emi">Monthly EMI (₹)</label>
+                        <input type="number" id="debt-emi" placeholder="If paid as EMIs" min="0.01" step="0.01">
+                    </div>
+                    <div>
+                        <label for="debt-emi-day">EMI date (day of month)</label>
+                        <input type="number" id="debt-emi-day" placeholder="e.g. 5" min="1" max="31" step="1">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <label for="debt-due">Pay back by (optional)</label>
                         <input type="date" id="debt-due">
                     </div>
                     <div>
                         <label for="debt-note">Note (optional)</label>
-                        <input type="text" id="debt-note" placeholder="e.g. 3 EMIs of ₹1,800" maxlength="100" autocomplete="off">
+                        <input type="text" id="debt-note" placeholder="e.g. for exam fees" maxlength="100" autocomplete="off">
                     </div>
                 </div>
-                <p class="hint">Include interest in the amount if you know it.</p>
 
                 <p id="debt-error" class="form-error" hidden></p>
 
@@ -273,12 +299,13 @@
             </form>
 
             <ul id="debt-list"></ul>
-            <p id="debt-empty" class="empty-message" hidden>No loans or dues. Add one if you borrowed or lent money.</p>
+            <p id="debt-empty" class="empty-message" hidden>No loans or EMIs. Add one if you took a loan, have an EMI, or borrowed or lent money.</p>
 
             <label class="check-label" id="show-settled-label" hidden>
                 <input type="checkbox" id="show-settled"> Show paid off (<span id="settled-count">0</span>)
             </label>
         </section>
+        </div>
 
     </div>
 </body>

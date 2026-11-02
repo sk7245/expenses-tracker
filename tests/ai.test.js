@@ -54,7 +54,7 @@ describe("keyword rules", () => {
     test("common Indian expenses", () => {
         assert.equal(categoryFromRules("Swiggy biryani", "expense"), "Food & Dining");
         assert.equal(categoryFromRules("Jio recharge 299", "expense"), "Bills & Recharge");
-        assert.equal(categoryFromRules("Credit card bill", "expense"), "EMI & Loans");
+        assert.equal(categoryFromRules("Electricity bill", "expense"), "Bills & Recharge");
         assert.equal(categoryFromRules("Uber to office", "expense"), "Transport");
         assert.equal(categoryFromRules("Petrol", "expense"), "Fuel");
         assert.equal(categoryFromRules("Salary credited", "income"), "Salary");
@@ -162,6 +162,11 @@ describe("AI endpoints", () => {
 
         const hard = await agent.post("/api/ai/categorize").send({ description: "Decathlon cycle", type: "expense" });
         assert.deepEqual(hard.body, { category: "Shopping", source: "ai" });
+        assert.equal(geminiCalls.length, 1);
+
+        // EMIs aren't spending: no category, and the page points to the Debits tab
+        const emi = await agent.post("/api/ai/categorize").send({ description: "Bike loan EMI", type: "expense" });
+        assert.deepEqual(emi.body, { category: null, source: "rules", debit: true });
         assert.equal(geminiCalls.length, 1);
     });
 

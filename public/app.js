@@ -349,9 +349,13 @@ async function suggestCategory() {
         // the user may have typed more or switched type while we waited
         if (descriptionInput.value.trim() !== description || getSelectedType() !== type || categoryPickedByUser) return;
 
-        if (result.category) {
+        if (result.debit) {
+            showHint(categoryHint, "Looks like an EMI or loan. Add it in the Debits & EMIs tab instead, so it isn't counted as spending.");
+        } else if (result.category) {
             categorySelect.value = result.category;
             showHint(categoryHint, `Picked "${categoryLabel(result.category)}" for you - change it if it's wrong.`);
+        } else {
+            showHint(categoryHint, "");
         }
     } catch {
         // suggestions are a nice extra; if they fail the user just picks a category
@@ -488,7 +492,20 @@ async function importOldData() {
 }
 
 
+// ---- tabs ----
+
+// the tab is kept in the address (#debits), so a refresh stays on the same tab
+function showTab() {
+    const current = window.location.hash === "#debits" ? "debits" : "spending";
+    document.getElementById("tab-spending").hidden = current !== "spending";
+    document.getElementById("tab-debits").hidden = current !== "debits";
+    document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === current));
+}
+
+
 // ---- events ----
+
+window.addEventListener("hashchange", showTab);
 
 form.addEventListener("submit", saveTransaction);
 cancelEditButton.addEventListener("click", resetForm);
@@ -550,6 +567,7 @@ async function start() {
         return;
     }
 
+    showTab();
     document.getElementById("app").hidden = false;
     document.getElementById("user-name").textContent = `Hi, ${user.name.split(" ")[0]}`;
 

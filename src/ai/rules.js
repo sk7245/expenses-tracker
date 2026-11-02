@@ -11,8 +11,6 @@ const KEYWORDS = {
             "indigo", "redbus", "parking", "toll", "fastag"],
         "Fuel": ["petrol", "diesel", "fuel", "cng"],
         "Rent": ["rent", "pg", "hostel", "maintenance"],
-        // before bills, so "credit card bill" lands here and not in Bills
-        "EMI & Loans": ["emi", "loan", "credit card bill"],
         "Bills & Recharge": ["recharge", "jio", "airtel", "electricity", "current bill", "water bill", "gas",
             "cylinder", "wifi", "broadband", "internet", "dth", "tata play", "bill"],
         "Shopping": ["amazon", "flipkart", "myntra", "ajio", "meesho", "nykaa", "clothes", "shirt", "jeans",
@@ -37,6 +35,19 @@ function escapeRegex(text) {
     return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+// EMIs and loan repayments aren't spending - they belong in the Debits tab
+const DEBIT_WORDS = ["emi", "emis", "loan", "credit card bill", "kreditbee", "moneyview", "kissht", "lazypay"];
+
+function hasWord(text, word) {
+    // \b = word boundary, so "bus" matches "bus ticket" but not "business"
+    return new RegExp(`\\b${escapeRegex(word)}\\b`).test(text);
+}
+
+function looksLikeDebit(description) {
+    const text = String(description || "").toLowerCase();
+    return DEBIT_WORDS.some((word) => hasWord(text, word));
+}
+
 // returns a category name, or null if nothing matched
 function categoryFromRules(description, type) {
     const text = String(description || "").toLowerCase();
@@ -44,8 +55,7 @@ function categoryFromRules(description, type) {
 
     for (const [category, words] of Object.entries(groups)) {
         for (const word of words) {
-            // \b = word boundary, so "bus" matches "bus ticket" but not "business"
-            if (new RegExp(`\\b${escapeRegex(word)}\\b`).test(text)) {
+            if (hasWord(text, word)) {
                 return category;
             }
         }
@@ -53,4 +63,4 @@ function categoryFromRules(description, type) {
     return null;
 }
 
-module.exports = { categoryFromRules, escapeRegex };
+module.exports = { categoryFromRules, looksLikeDebit, escapeRegex };
